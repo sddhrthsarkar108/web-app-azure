@@ -10,5 +10,5 @@ export const msalConfig: Configuration = {
 };
 
 export const loginRequest: PopupRequest = {
-    scopes: [`api://${import.meta.env.VITE_CLIENTID}/ourapi`]
+    scopes: [import.meta.env.VITE_API_SCOPE_URI]
 };

@@ -13,9 +13,9 @@ function Home() {
 
     return (
         <div>
-            <p>
+            <div>
                 {account ? <div>{account.name}</div> : <button onClick={handleLogin} className="btn">Click here to login</button>}
-            </p>
+            </div>
         </div>
     );
 }

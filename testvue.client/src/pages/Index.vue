@@ -10,7 +10,7 @@
 
     const response = await auth.msalInstance.acquireTokenSilent({
       account: auth.account,
-      scopes: [`api://${import.meta.env.VITE_CLIENTID}/ourapi`]
+      scopes: [import.meta.env.VITE_API_SCOPE_URI]
     });
 
     auth.token = response.accessToken;
