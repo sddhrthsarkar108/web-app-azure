@@ -31,9 +31,26 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
   env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7230';
 
+import viteCompression from 'vite-plugin-compression';
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [plugin()],
+  plugins: [
+    plugin(),
+    viteCompression() // Gzip compression
+  ],
+  build: {
+    target: 'esnext', // Modern browsers, smaller code
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ag-grid': ['ag-grid-react', 'ag-grid-community'],
+          'vendor-msal': ['@azure/msal-browser', '@azure/msal-react'],
+        }
+      }
+    }
+  },
   server: {
     proxy: {
       '^/weatherforecast': {
@@ -45,9 +62,6 @@ export default defineConfig({
     https: {
       key: fs.readFileSync(keyFilePath),
       cert: fs.readFileSync(certFilePath),
-    },
-    // headers: {
-    //   'Cross-Origin-Opener-Policy': 'same-origin-allow-popups'
-    // }
+    }
   }
 })
