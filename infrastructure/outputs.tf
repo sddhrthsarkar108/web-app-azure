@@ -23,3 +23,11 @@ output "storage_website_url" {
 output "storage_account_name" {
   value = azurerm_storage_account.web_storage.name
 }
+
+output "storage_container_name" {
+  value = azurerm_storage_container.web_content.name
+}
+
+output "frontdoor_url" {
+  value = "https://${azurerm_cdn_frontdoor_endpoint.fd_endpoint.host_name}"
+}

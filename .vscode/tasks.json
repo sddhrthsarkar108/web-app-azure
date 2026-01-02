@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "dotnet: build"
+		},
+		{
+			"type": "dotnet",
+			"task": "watch TestVue.Server",
+			"file": "/Users/siddhartha.sarkar/Desktop/my.learnings/Azure/web-app-azure/TestVue.Server/TestVue.Server.csproj",
+			"problemMatcher": [],
+			"label": "dotnet: watch TestVue.Server"
+		}
+	]
+}

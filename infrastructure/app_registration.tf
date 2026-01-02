@@ -19,9 +19,11 @@ resource "azuread_application" "web_app" {
   identifier_uris = ["api://${data.azuread_domains.default.domains[0].domain_name}/${var.app_name}"]
 
   single_page_application {
+    # CRITICAL FIX: Point to Front Door, NOT Storage
+    # Since storage is private, redirecting there would result in a 403 error.
     redirect_uris = concat(
       var.redirect_uris,
-      [azurerm_storage_account.web_storage.primary_web_endpoint]
+      [ "https://${azurerm_cdn_frontdoor_endpoint.fd_endpoint.host_name}/" ]
     )
   }
 
