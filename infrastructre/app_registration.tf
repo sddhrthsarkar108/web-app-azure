@@ -19,7 +19,10 @@ resource "azuread_application" "web_app" {
   identifier_uris = ["api://${data.azuread_domains.default.domains[0].domain_name}/${var.app_name}"]
 
   single_page_application {
-    redirect_uris = var.redirect_uris
+    redirect_uris = concat(
+      var.redirect_uris,
+      [azurerm_storage_account.web_storage.primary_web_endpoint]
+    )
   }
 
   # 2. Expose the API Scope

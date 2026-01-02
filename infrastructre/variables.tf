@@ -1,6 +1,21 @@
+variable "subscription_id" {
+  type        = string
+  description = "Azure Subscription ID"
+}
+
 variable "app_name" {
   default = "TestClient_TF"
   description = "The display name for the App Registration"
+}
+
+variable "environment" {
+  type        = string
+  default     = "dev"
+}
+
+variable "location" {
+  type        = string
+  default     = "East US"
 }
 
 variable "scope_name" {

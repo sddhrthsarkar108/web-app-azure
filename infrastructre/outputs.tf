@@ -14,3 +14,12 @@ output "test_user_username" {
   value       = azuread_user.test_user.user_principal_name
   description = "Username for the automated test user"
 }
+
+# This is the URL you will visit to test the deployed site
+output "storage_website_url" {
+  value = azurerm_storage_account.web_storage.primary_web_endpoint
+}
+
+output "storage_account_name" {
+  value = azurerm_storage_account.web_storage.name
+}
