@@ -39,9 +39,16 @@ resource "azurerm_cdn_frontdoor_origin" "fd_origin" {
   name                           = "origin-storage-web"
   cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.fd_origin_group.id
   enabled                        = true
-  certificate_name_check_enabled = false
+  certificate_name_check_enabled = true
   host_name                      = azurerm_storage_account.web_storage.primary_web_host
   origin_host_header             = azurerm_storage_account.web_storage.primary_web_host
+
+  private_link {
+    request_message        = "Auto-request from Terraform"
+    target_type            = "web"
+    location               = var.location
+    private_link_target_id = azurerm_storage_account.web_storage.id
+  }
 
   http_port  = 80
   https_port = 443
@@ -60,7 +67,7 @@ resource "azurerm_cdn_frontdoor_route" "fd_route" {
   # Removed custom domain integration as it requires pre-configuration
   # cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.ihelpyoutodo_domain.id]
 
-  forwarding_protocol    = "MatchRequest"
+  forwarding_protocol    = "HttpsOnly"
   https_redirect_enabled = true
   patterns_to_match      = ["/*"]
   supported_protocols    = ["Http", "Https"]

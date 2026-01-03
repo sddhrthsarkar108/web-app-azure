@@ -13,6 +13,12 @@ resource "azurerm_cdn_frontdoor_firewall_policy" "waf" {
     action  = "Block"
   }
 
+  managed_rule {
+    type    = "Microsoft_BotManagerRuleSet"
+    version = "1.0"
+    action  = "Block"
+  }
+
   tags = var.tags
 }
 

@@ -16,11 +16,27 @@ resource "azurerm_storage_account" "web_storage" {
   account_replication_type          = "RAGRS"
   account_kind                      = "StorageV2"
   infrastructure_encryption_enabled = true
+  https_traffic_only_enabled        = true
+  min_tls_version                   = "TLS1_2"
   tags                              = var.tags
+
+  # Network Security
+  public_network_access_enabled = true # Must be true for IP rules to work
+
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices"]
+    ip_rules       = [chomp(data.http.ip.response_body)]
+  }
 }
 
 resource "azurerm_storage_account_static_website" "web_content" {
   storage_account_id = azurerm_storage_account.web_storage.id
   #error_404_document = "index.html"
   index_document = "index.html"
+}
+
+# Fetch the deployment machine's public IP
+data "http" "ip" {
+  url = "https://api.ipify.org"
 }
