@@ -1,5 +1,5 @@
 output "vite_client_id" {
-  value = azuread_application.web_app.client_id
+  value = module.identity.application_client_id
 }
 
 output "vite_authority" {
@@ -11,23 +11,29 @@ output "api_scope_uri" {
 }
 
 output "test_user_username" {
-  value       = azuread_user.test_user.user_principal_name
+  value       = module.identity.test_user_username
   description = "Username for the automated test user"
 }
 
 # This is the URL you will visit to test the deployed site
 output "storage_website_url" {
-  value = azurerm_storage_account.web_storage.primary_web_endpoint
+  value = module.frontend.storage_primary_web_endpoint
 }
 
 output "storage_account_name" {
-  value = azurerm_storage_account.web_storage.name
+  value = module.frontend.storage_account_name
 }
 
+# Static website container is always $web
 output "storage_container_name" {
-  value = azurerm_storage_container.web_content.name
+  value = "$web"
 }
 
 output "frontdoor_url" {
-  value = "https://${azurerm_cdn_frontdoor_endpoint.fd_endpoint.host_name}"
+  value = "https://${module.frontend.fd_endpoint_host_name}"
+}
+
+output "app_insights_connection_string" {
+  value     = module.monitoring.application_insights_connection_string
+  sensitive = true
 }

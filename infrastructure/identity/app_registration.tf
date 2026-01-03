@@ -1,10 +1,5 @@
 data "azuread_client_config" "current" {}
 
-# Fetch the default domain (e.g., "contoso.onmicrosoft.com")
-data "azuread_domains" "default" {
-  only_initial = true
-}
-
 # 1. Create the App Registration
 resource "azuread_application" "web_app" {
   display_name = var.app_name
@@ -14,16 +9,15 @@ resource "azuread_application" "web_app" {
     "TerraformManaged",
     "Project:WebAppAzure"
   ]
-  
+
   # Result: api://yourtenant.onmicrosoft.com/TestClient_TF
-  identifier_uris = ["api://${data.azuread_domains.default.domains[0].domain_name}/${var.app_name}"]
+  identifier_uris = ["api://${var.domain_name}/${var.app_name}"]
 
   single_page_application {
-    # CRITICAL FIX: Point to Front Door, NOT Storage
-    # Since storage is private, redirecting there would result in a 403 error.
     redirect_uris = concat(
       var.redirect_uris,
-      [ "https://${azurerm_cdn_frontdoor_endpoint.fd_endpoint.host_name}/" ]
+      ["https://${var.frontend_endpoint_host_name}/"],
+      [var.storage_website_url]
     )
   }
 
@@ -62,7 +56,7 @@ resource "azuread_application" "web_app" {
 # 4. Create the Service Principal
 resource "azuread_service_principal" "web_app_sp" {
   client_id = azuread_application.web_app.client_id
-  
+
   owners = [data.azuread_client_config.current.object_id]
 
   tags = [
