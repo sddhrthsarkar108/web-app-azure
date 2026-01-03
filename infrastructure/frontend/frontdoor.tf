@@ -2,8 +2,13 @@ resource "azurerm_cdn_frontdoor_profile" "fd" {
   name                     = "afd-${lower(replace(var.app_name, "_", "-"))}-${var.environment}"
   resource_group_name      = var.resource_group_name
   response_timeout_seconds = 16
-  sku_name                 = "Standard_AzureFrontDoor"
+  sku_name                 = "Premium_AzureFrontDoor"
   tags                     = var.tags
+
+  timeouts {
+    create = "2h"
+    delete = "2h"
+  }
 }
 
 resource "azurerm_cdn_frontdoor_endpoint" "fd_endpoint" {

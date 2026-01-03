@@ -5,8 +5,9 @@ resource "random_string" "monitoring_suffix" {
 }
 
 # 1. Log Analytics Workspace
+# 1. Log Analytics Workspace
 resource "azurerm_log_analytics_workspace" "analytics" {
-  name                = "law-${lower(var.app_name)}-${var.environment}-${random_string.monitoring_suffix.result}"
+  name                = "law-${lower(replace(var.app_name, "_", "-"))}-${var.environment}-${random_string.monitoring_suffix.result}"
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = "PerGB2018"
@@ -16,7 +17,7 @@ resource "azurerm_log_analytics_workspace" "analytics" {
 
 # 2. Application Insights
 resource "azurerm_application_insights" "app_insights" {
-  name                = "ai-${lower(var.app_name)}-${var.environment}"
+  name                = "ai-${lower(replace(var.app_name, "_", "-"))}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
   application_type    = "web"

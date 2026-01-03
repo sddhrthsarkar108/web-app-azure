@@ -5,3 +5,5 @@
 
 # Secrets (The .env.local equivalent)
 *.tfvars
+
+*lock.info
